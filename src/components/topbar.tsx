@@ -4,6 +4,7 @@
 // ============================================================
 import { createClient } from '@/lib/supabase/server';
 import { LogoutButton } from './logout-button';
+import { GlobalSearch } from './global-search';
 
 export async function Topbar() {
   const supabase = await createClient();
@@ -25,10 +26,8 @@ export async function Topbar() {
   const initial = displayName[0]?.toUpperCase() || 'A';
 
   return (
-    <header className="h-14 border-b border-[var(--border-soft)] bg-[var(--bg-primary)]/80 backdrop-blur-md flex items-center justify-between px-6">
-      <div className="text-sm text-[var(--text-muted)]">
-        Connecté en tant qu'<span className="text-white font-semibold">administrateur</span>
-      </div>
+    <header className="h-14 border-b border-[var(--border-soft)] bg-[var(--bg-primary)]/80 backdrop-blur-md flex items-center justify-between px-6 gap-4">
+      <GlobalSearch />
 
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2.5">

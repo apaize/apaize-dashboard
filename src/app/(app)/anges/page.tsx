@@ -4,6 +4,7 @@
 import { Sparkles, AlertTriangle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate, timeAgo } from '@/lib/utils';
+import { AngelActionsMenu } from './angel-actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,12 +85,13 @@ export default async function AngesPage() {
               <th className="text-left px-4 py-3 font-semibold">Note</th>
               <th className="text-left px-4 py-3 font-semibold">Formation</th>
               <th className="text-left px-4 py-3 font-semibold">Statut</th>
+              <th className="text-right px-4 py-3 font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--border-soft)]">
             {angels.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-12 text-center text-[var(--text-muted)]">
+                <td colSpan={7} className="px-4 py-12 text-center text-[var(--text-muted)]">
                   Aucun Ange Apaize pour l'instant.
                 </td>
               </tr>
@@ -181,6 +183,14 @@ export default async function AngesPage() {
                         <span className="text-[10px] text-[var(--gold)] font-bold">⚠ {a.warning_count} avertissements</span>
                       )}
                     </div>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <AngelActionsMenu
+                      userId={a.user_id}
+                      isSuspended={!!a.is_suspended}
+                      currentLevel={a.level || 'bronze'}
+                      quizPassed={!!a.quiz_passed}
+                    />
                   </td>
                 </tr>
               );

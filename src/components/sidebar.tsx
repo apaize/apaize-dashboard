@@ -14,6 +14,8 @@ import {
   Sparkles,
   BarChart3,
   FileText,
+  Megaphone,
+  ScrollText,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -46,6 +48,13 @@ const NAV: { section: string; items: NavItem[] }[] = [
     section: 'Modération',
     items: [
       { href: '/moderation', label: 'Signalements', icon: ShieldAlert },
+      { href: '/audit', label: 'Audit log', icon: ScrollText },
+    ],
+  },
+  {
+    section: 'Outils admin',
+    items: [
+      { href: '/broadcast', label: 'Broadcast', icon: Megaphone },
       { href: '/content', label: 'Contenu', icon: FileText },
     ],
   },

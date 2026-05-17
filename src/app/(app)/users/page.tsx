@@ -1,6 +1,7 @@
 // ============================================================
 // 👥 Users — liste paginée + actions de modération
 // ============================================================
+import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { UserActionsMenu } from './user-actions-menu';
@@ -105,12 +106,12 @@ export default async function UsersPage({
                 return (
                   <tr key={u.id} className="hover:bg-white/5 transition-colors">
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-2.5">
+                      <Link href={`/users/${u.id}`} className="flex items-center gap-2.5 hover:text-[var(--serenity)] group">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--serenity)] to-[var(--douceur)] flex items-center justify-center text-xs font-bold text-white">
                           {(u.username?.[0] || u.email?.[0] || '?').toUpperCase()}
                         </div>
                         <div>
-                          <div className="font-semibold text-white flex items-center gap-1.5">
+                          <div className="font-semibold text-white group-hover:text-[var(--serenity)] flex items-center gap-1.5">
                             {u.username || <span className="text-[var(--text-muted)] italic">sans pseudo</span>}
                             {u.is_admin && (
                               <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-[var(--gold)]/20 text-[var(--gold)] font-bold uppercase">Admin</span>
@@ -118,7 +119,7 @@ export default async function UsersPage({
                           </div>
                           <div className="text-[10px] text-[var(--text-muted)] font-mono">{u.id.slice(0, 8)}…</div>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-4 py-3 text-[var(--text-secondary)]">{u.email || '—'}</td>
                     <td className="px-4 py-3">

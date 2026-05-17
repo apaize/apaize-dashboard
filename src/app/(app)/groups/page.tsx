@@ -2,9 +2,10 @@
 // # Groups (Salons) — liste des salons + activité
 // ============================================================
 import Link from 'next/link';
-import { Hash, Users as UsersIcon, MessagesSquare, ChevronRight } from 'lucide-react';
+import { Hash, Users as UsersIcon, ChevronRight } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { timeAgo } from '@/lib/utils';
+import { ToggleGroupOpen } from './group-actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,15 +41,7 @@ export default async function GroupsPage() {
                 <div className="w-10 h-10 rounded-xl bg-[var(--serenity)]/15 border border-[var(--serenity)]/30 flex items-center justify-center">
                   <Hash size={16} className="text-[var(--serenity)]" />
                 </div>
-                <span
-                  className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                    g.is_open
-                      ? 'bg-[var(--breath)]/15 text-[var(--breath)] border border-[var(--breath)]/30'
-                      : 'bg-white/5 text-[var(--text-muted)]'
-                  }`}
-                >
-                  {g.is_open ? 'Ouvert' : 'Fermé'}
-                </span>
+                <ToggleGroupOpen groupId={g.id} isOpen={!!g.is_open} />
               </div>
 
               <div className="font-bold text-white mb-1">

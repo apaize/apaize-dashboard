@@ -3,6 +3,7 @@
 // ============================================================
 import { FileText } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
+import { AddBannedWordForm, DeleteBannedWordBtn, ToggleSpark, ToggleThemePublish } from './content-actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,9 +69,7 @@ export default async function ContentPage({
                   <div className="font-bold text-white">{t.name}</div>
                   <div className="text-[10px] text-[var(--text-muted)] font-mono">{t.slug}</div>
                 </div>
-                {!t.is_published && (
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[var(--gold)]/15 text-[var(--gold)] font-bold uppercase">Brouillon</span>
-                )}
+                <ToggleThemePublish id={t.id} isPublished={!!t.is_published} />
               </div>
               {t.short_description && (
                 <p className="text-xs text-[var(--text-secondary)] line-clamp-3">{t.short_description}</p>
@@ -84,35 +83,42 @@ export default async function ContentPage({
       )}
 
       {tab === 'banned_words' && (
-        <div className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border-soft)] overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="text-xs text-[var(--text-muted)] uppercase tracking-wider bg-white/5">
-              <tr>
-                <th className="text-left px-4 py-3 font-semibold">Mot</th>
-                <th className="text-left px-4 py-3 font-semibold">Sévérité</th>
-                <th className="text-left px-4 py-3 font-semibold">Catégorie</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[var(--border-soft)]">
-              {words.data?.map((w: any) => (
-                <tr key={w.id} className="hover:bg-white/5">
-                  <td className="px-4 py-2.5 font-mono text-white">{w.word}</td>
-                  <td className="px-4 py-2.5">
-                    <span
-                      className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase"
-                      style={{
-                        background: w.severity === 'crisis' ? 'rgba(240,133,133,0.20)' : w.severity === 'block' ? 'rgba(255,213,142,0.20)' : 'rgba(141,167,255,0.20)',
-                        color: w.severity === 'crisis' ? '#f08585' : w.severity === 'block' ? '#ffd58e' : '#8da7ff',
-                      }}
-                    >
-                      {w.severity}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2.5 text-[var(--text-secondary)]">{w.category ?? '—'}</td>
+        <div>
+          <AddBannedWordForm />
+          <div className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border-soft)] overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="text-xs text-[var(--text-muted)] uppercase tracking-wider bg-white/5">
+                <tr>
+                  <th className="text-left px-4 py-3 font-semibold">Mot</th>
+                  <th className="text-left px-4 py-3 font-semibold">Sévérité</th>
+                  <th className="text-left px-4 py-3 font-semibold">Catégorie</th>
+                  <th className="text-right px-4 py-3 font-semibold w-12">—</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-[var(--border-soft)]">
+                {words.data?.map((w: any) => (
+                  <tr key={w.id} className="hover:bg-white/5">
+                    <td className="px-4 py-2.5 font-mono text-white">{w.word}</td>
+                    <td className="px-4 py-2.5">
+                      <span
+                        className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase"
+                        style={{
+                          background: w.severity === 'crisis' ? 'rgba(240,133,133,0.20)' : w.severity === 'block' ? 'rgba(255,213,142,0.20)' : 'rgba(141,167,255,0.20)',
+                          color: w.severity === 'crisis' ? '#f08585' : w.severity === 'block' ? '#ffd58e' : '#8da7ff',
+                        }}
+                      >
+                        {w.severity}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5 text-[var(--text-secondary)]">{w.category ?? '—'}</td>
+                    <td className="px-4 py-2.5 text-right">
+                      <DeleteBannedWordBtn id={w.id} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
@@ -126,6 +132,7 @@ export default async function ContentPage({
                   <div className="text-sm text-white">{s.text}</div>
                   <div className="text-[10px] text-[var(--text-muted)] font-mono mt-0.5">{s.key}</div>
                 </div>
+                <ToggleSpark sparkKey={s.key} isActive={!!s.is_active} />
               </div>
             </div>
           ))}

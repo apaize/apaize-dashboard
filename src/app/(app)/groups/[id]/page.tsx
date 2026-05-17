@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Hash, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { timeAgo } from '@/lib/utils';
+import { HideMessageBtn, KickMemberBtn, ToggleGroupOpen } from '../group-actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -61,9 +62,12 @@ export default async function GroupDetailPage({
 
       {/* Header */}
       <div className="p-5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-medium)]">
-        <div className="flex items-center gap-3 mb-2">
-          <Hash size={20} className="text-[var(--serenity)]" />
-          <h1 className="text-2xl font-bold">#{group.theme_slug}-{group.number}</h1>
+        <div className="flex items-center justify-between gap-3 mb-2">
+          <div className="flex items-center gap-3">
+            <Hash size={20} className="text-[var(--serenity)]" />
+            <h1 className="text-2xl font-bold">#{group.theme_slug}-{group.number}</h1>
+          </div>
+          <ToggleGroupOpen groupId={group.id} isOpen={!!group.is_open} />
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-[var(--text-secondary)]">
           <span><strong className="text-white">{members.length}</strong> membres</span>
@@ -82,7 +86,7 @@ export default async function GroupDetailPage({
             {members.map((m: any) => {
               const u: any = usersMap.get(m.user_id);
               return (
-                <li key={m.user_id} className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/5">
+                <li key={m.user_id} className="group flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/5">
                   <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--serenity)] to-[var(--douceur)] flex items-center justify-center text-[10px] font-bold text-white">
                     {(u?.username?.[0] || '?').toUpperCase()}
                   </div>
@@ -90,6 +94,7 @@ export default async function GroupDetailPage({
                     <div className="text-sm font-medium text-white truncate">{u?.username || m.user_id.slice(0, 8)}</div>
                     <div className="text-[10px] text-[var(--text-muted)]">{timeAgo(m.joined_at)}</div>
                   </div>
+                  <KickMemberBtn groupId={group.id} userId={m.user_id} />
                 </li>
               );
             })}
@@ -123,6 +128,9 @@ export default async function GroupDetailPage({
                         <EyeOff size={9} /> Masqué
                       </span>
                     )}
+                    <div className="ml-auto">
+                      <HideMessageBtn messageId={m.id} hidden={!!m.hidden} />
+                    </div>
                   </div>
                   <p className="text-sm text-white/90">{m.content}</p>
                   {m.hidden && m.hidden_reason && (
